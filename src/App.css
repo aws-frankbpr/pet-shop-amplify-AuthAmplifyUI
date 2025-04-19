@@ -1,18 +1,9 @@
-/* Reset and base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  line-height: 1.6;
-  color: #333;
-}
-
-/* Navigation */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -20,10 +11,6 @@ body {
   padding: 1rem 5%;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
 }
 
 .nav-brand {
@@ -31,8 +18,12 @@ body {
   font-weight: bold;
 }
 
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
 .nav-links a {
-  margin-left: 2rem;
   text-decoration: none;
   color: #333;
   transition: color 0.3s ease;
@@ -42,9 +33,8 @@ body {
   color: #007bff;
 }
 
-/* Hero section */
 .hero {
-  padding: 8rem 5% 4rem;
+  padding: 4rem 5%;
   text-align: center;
   background-color: #f8f9fa;
 }
@@ -54,12 +44,11 @@ body {
   margin-bottom: 1rem;
 }
 
-/* Main content */
 .main-content {
   padding: 2rem 5%;
+  flex-grow: 1;
 }
 
-/* Filters */
 .filters {
   margin-bottom: 2rem;
   text-align: center;
@@ -76,21 +65,17 @@ body {
   transition: all 0.3s ease;
 }
 
-.filters button.active,
-.filters button:hover {
-  background: #007bff;
+.filters button.active {
+  background-color: #007bff;
   color: white;
 }
 
-/* Pets grid */
 .pets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
-  padding: 1rem 0;
 }
 
-/* Pet cards */
 .pet-card {
   border-radius: 10px;
   overflow: hidden;
@@ -110,10 +95,6 @@ body {
 
 .pet-info {
   padding: 1rem;
-}
-
-.pet-info h3 {
-  margin-bottom: 0.5rem;
 }
 
 .breed {
@@ -142,12 +123,10 @@ body {
   background-color: #0056b3;
 }
 
-/* Footer */
 .footer {
   background-color: #333;
   color: white;
   padding: 3rem 5% 1rem;
-  margin-top: 3rem;
 }
 
 .footer-content {
@@ -167,14 +146,9 @@ body {
   border-top: 1px solid #555;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .nav-links {
-    display: none;
-  }
-  
-  .hero {
-    padding: 6rem 5% 3rem;
+    gap: 1rem;
   }
   
   .hero h1 {
