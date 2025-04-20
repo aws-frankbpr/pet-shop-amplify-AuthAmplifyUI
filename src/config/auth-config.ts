@@ -17,8 +17,12 @@ export const authConfig: ResourcesConfig = {
         oauth: {
           domain: requireEnvVar ('REACT_APP_COGNITO_DOMAIN'),
           scopes: ['email', 'openid', 'profile'],
-          redirectSignIn: ['http://localhost:3000'],
-          redirectSignOut: ['http://localhost:3000'],
+          redirectSignIn: ['http://localhost:3000',
+            'https://main.d3lg2e3qgeamfr.amplifyapp.com/'
+          ],
+          redirectSignOut: ['http://localhost:3000',
+            'https://main.d3lg2e3qgeamfr.amplifyapp.com/'
+          ],
           responseType: 'code'
         }
       }
