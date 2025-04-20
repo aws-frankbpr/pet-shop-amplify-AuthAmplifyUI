@@ -1,3 +1,4 @@
+/* src/App.css */
 .app {
   min-height: 100vh;
   display: flex;
@@ -146,16 +147,60 @@
   border-top: 1px solid #555;
 }
 
+/* Authentication styles */
+.auth-header {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.auth-header h1 {
+  margin: 10px 0;
+  color: #333;
+}
+
+.auth-header p {
+  color: #666;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.username {
+  color: #333;
+  font-weight: 500;
+}
+
+.sign-out-button {
+  padding: 8px 16px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sign-out-button:hover {
+  background-color: #c82333;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .nav-links {
-    gap: 1rem;
+    flex-direction: column;
+    gap: 10px;
   }
-  
-  .hero h1 {
-    font-size: 2rem;
+
+  .user-section {
+    flex-direction: column;
+    align-items: stretch;
   }
-  
-  .filters button {
-    margin-bottom: 0.5rem;
+
+  .sign-out-button {
+    width: 100%;
   }
 }
