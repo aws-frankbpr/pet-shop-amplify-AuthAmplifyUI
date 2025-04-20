@@ -1,4 +1,4 @@
-import { ResourcesConfig } from 'aws-amplify';
+import { ResourcesConfig } from '@aws-amplify/core';
 
 const requireEnvVar = (name: string): string => {
   const value = process.env[name];
@@ -11,15 +11,15 @@ const requireEnvVar = (name: string): string => {
 export const authConfig: ResourcesConfig = {
   Auth: {
     Cognito: {
-      userPoolId: requireEnvVar('REACT_APP_USER_POOL_ID'),
-      userPoolClientId: requireEnvVar('REACT_APP_USER_POOL_CLIENT_ID'),
+      userPoolId: process.env.REACT_APP_USER_POOL_ID || '',
+      userPoolClientId: process.env.REACT_APP_USER_POOL_CLIENT_ID || '',
       loginWith: {
         oauth: {
-          domain: requireEnvVar ('REACT_APP_COGNITO_DOMAIN'),
+          domain: process.env.REACT_APP_COGNITO_DOMAIN || '',
           scopes: ['email', 'openid', 'profile'],
           redirectSignIn: ['http://localhost:3000',
             'https://main.dr4ixyv9p77ql.amplifyapp.com/',
-             'https://cognito.funtamentals.online'
+            'https://cognito.funtamentals.online'
           ],
           redirectSignOut: ['http://localhost:3000',
             'https://main.dr4ixyv9p77ql.amplifyapp.com/',

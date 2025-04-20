@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { signInWithRedirect, signOut, getCurrentUser } from 'aws-amplify/auth';
-import type { AuthUser } from '@aws-amplify/auth';
+import React, { useState } from 'react';
+import { Authenticator, useTheme, View, Image, Text } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 import './App.css';
 
 interface Pet {
@@ -16,34 +16,38 @@ interface Pet {
 type Category = 'all' | 'dogs' | 'cats';
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<Category>('all');
+  const { tokens } = useTheme();
 
-  useEffect(() => {
-    checkUser();
-  }, []);
-
-  async function checkUser() {
-    try {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-      setIsLoading(false);
-    } catch (err) {
-      setUser(null);
-      setIsLoading(false);
-      await signInWithRedirect();
-    }
-  }
-
-  const handleSignOut = async () => {
-    try {
-      await signOut({ global: true }); // Add the global option
-      setUser(null);
-      // Remove the manual redirect as it will happen automatically with global sign-out
-      // await signInWithRedirect();
-    } catch (error) {
-      console.error('Error signing out:', error);
+  const formFields = {
+    signUp: {
+      email: {
+        order: 1,
+        isRequired: true,
+        placeholder: 'Enter your email'
+      },
+      password: {
+        order: 2,
+        isRequired: true,
+        placeholder: 'Enter your password'
+      },
+      confirm_password: {
+        order: 3,
+        isRequired: true,
+        placeholder: 'Confirm your password'
+      }
+    },
+    signIn: {
+      username: {
+        order: 1,
+        isRequired: true,
+        placeholder: 'Enter your email'
+      },
+      password: {
+        order: 2,
+        isRequired: true,
+        placeholder: 'Enter your password'
+      }
     }
   };
 
@@ -90,73 +94,124 @@ const App: React.FC = () => {
     ? pets 
     : pets.filter(pet => pet.category === selectedCategory);
 
-  if (isLoading) {
-    return <div className="loading">Loading...</div>;
-  }
-
-  if (!user) {
-    return null; // The redirect will happen automatically
-  }
-
   return (
-    <div className="app">
-      <nav className="navbar">
-        <div className="nav-brand">
-          <span role="img" aria-label="paw">🐾</span> Pet Shop
-        </div>
-        <div className="nav-links">
-          <a href="#home">Home</a>
-          <a href="#shop">Shop</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-          <div className="user-section">
-            <span className="username">
-              Hello, {user.signInDetails?.loginId || user.username}
-            </span>
-            <button onClick={handleSignOut} className="sign-out-button">
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <main className="main-content">
-        <div className="filters">
-          <button 
-            className={selectedCategory === 'all' ? 'active' : ''} 
-            onClick={() => setSelectedCategory('all')}
-          >
-            All Pets
-          </button>
-          <button 
-            className={selectedCategory === 'dogs' ? 'active' : ''} 
-            onClick={() => setSelectedCategory('dogs')}
-          >
-            Dogs
-          </button>
-          <button 
-            className={selectedCategory === 'cats' ? 'active' : ''} 
-            onClick={() => setSelectedCategory('cats')}
-          >
-            Cats
-          </button>
-        </div>
-
-        <div className="pets-grid">
-          {filteredPets.map(pet => (
-            <div key={pet.id} className="pet-card">
-              <img src={pet.imageUrl} alt={pet.name} className="pet-image" />
-              <div className="pet-info">
-                <h3>{pet.name}</h3>
-                <p className="breed">{pet.breed}</p>
-                <p className="age">{pet.age} year(s) old</p>
-                <p className="price">${pet.price}</p>
-                <button className="adopt-button">Adopt Now</button>
+    <div className="auth-wrapper">
+      <Authenticator 
+        formFields={formFields}
+        initialState="signIn"
+        loginMechanisms={['email']}
+        components={{
+          Header() {
+            return (
+              <View className="auth-header">
+                <div className="auth-logo">
+                  <span role="img" aria-label="paw">🐾</span>
+                </div>
+                <Text className="auth-title">Pet Shop</Text>
+                <Text className="auth-subtitle">Find your perfect companion</Text>
+              </View>
+            );
+          },
+          SignIn: {
+            Header() {
+              return (
+                <View className="auth-form-header">
+                  <Text className="auth-form-title">Welcome Back!</Text>
+                  <Text className="auth-form-subtitle">Sign in to your account</Text>
+                </View>
+              );
+            },
+            Footer() {
+              return (
+                <View className="auth-footer">
+                  <Text>Don't have an account?</Text>
+                  <button className="auth-switch-button">Sign up now</button>
+                </View>
+              );
+            }
+          },
+          SignUp: {
+            Header() {
+              return (
+                <View className="auth-form-header">
+                  <Text className="auth-form-title">Create Account</Text>
+                  <Text className="auth-form-subtitle">Join our pet-loving community</Text>
+                </View>
+              );
+            },
+            Footer() {
+              return (
+                <View className="auth-footer">
+                  <Text>Already have an account?</Text>
+                  <button className="auth-switch-button">Sign in</button>
+                </View>
+              );
+            }
+          }
+        }}
+      >
+        {({ signOut, user }) => (
+          <div className="app">
+            <nav className="navbar">
+              <div className="nav-brand">
+                <span role="img" aria-label="paw">🐾</span> Pet Shop
               </div>
-            </div>
-          ))}
-        </div>
-      </main>
+              <div className="nav-links">
+                <a href="#home">Home</a>
+                <a href="#shop">Shop</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+                <div className="user-section">
+                  <span className="username">
+                    Hello, {user?.signInDetails?.loginId}
+                  </span>
+                  <button onClick={signOut} className="sign-out-button">
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </nav>
+
+            <main className="main-content">
+              <div className="filters">
+                <button 
+                  className={selectedCategory === 'all' ? 'active' : ''} 
+                  onClick={() => setSelectedCategory('all')}
+                >
+                  All Pets
+                </button>
+                <button 
+                  className={selectedCategory === 'dogs' ? 'active' : ''} 
+                  onClick={() => setSelectedCategory('dogs')}
+                >
+                  Dogs
+                </button>
+                <button 
+                  className={selectedCategory === 'cats' ? 'active' : ''} 
+                  onClick={() => setSelectedCategory('cats')}
+                >
+                  Cats
+                </button>
+              </div>
+
+              <div className="pets-grid">
+                {filteredPets.map((pet: Pet) => (
+                  <div key={pet.id} className="pet-card">
+                    <img src={pet.imageUrl} alt={pet.name} className="pet-image" />
+                    <div className="pet-info">
+                      <h3>{pet.name}</h3>
+                      <p className="breed">{pet.breed}</p>
+                      <p className="age">{pet.age} year(s) old</p>
+                      <p className="price">${pet.price}</p>
+                      <button className="adopt-button">Adopt Now</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </main>
+          </div>
+        )}
+      </Authenticator>
     </div>
   );
 };
