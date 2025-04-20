@@ -38,9 +38,10 @@ const App: React.FC = () => {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await signOut({ global: true }); // Add the global option
       setUser(null);
-      await signInWithRedirect();
+      // Remove the manual redirect as it will happen automatically with global sign-out
+      // await signInWithRedirect();
     } catch (error) {
       console.error('Error signing out:', error);
     }
