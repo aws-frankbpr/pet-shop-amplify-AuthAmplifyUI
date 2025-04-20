@@ -18,10 +18,12 @@ export const authConfig: ResourcesConfig = {
           domain: requireEnvVar ('REACT_APP_COGNITO_DOMAIN'),
           scopes: ['email', 'openid', 'profile'],
           redirectSignIn: ['http://localhost:3000',
-            'https://main.d3lg2e3qgeamfr.amplifyapp.com/'
+            'https://main.d3lg2e3qgeamfr.amplifyapp.com/',
+             'https://cognito.funtamentals.online'
           ],
           redirectSignOut: ['http://localhost:3000',
-            'https://main.d3lg2e3qgeamfr.amplifyapp.com/'
+            'https://main.d3lg2e3qgeamfr.amplifyapp.com/',
+            'https://cognito.funtamentals.online'
           ],
           responseType: 'code'
         }
